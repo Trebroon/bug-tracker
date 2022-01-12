@@ -1,0 +1,33 @@
+<%- layout('layouts/boilerplate') %> 
+<div class="card col-md-8 my-5">
+  <div class="card-body">
+    <h2>Your Tickets</h2>
+    <% if (user.userTickets.length) { %> 
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Type</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (let ticket of user.userTickets) { %> 
+              <tr>
+                <td><a href="/<%= ticket.projectId %>"><%= ticket.title %></a></td>
+                <td><a href="/<%= ticket.projectId %>"><%= ticket.description %></a></td>
+                <td><%= ticket.type %></td>
+                <td><%= ticket.priority %></td>
+              </tr>
+            <% } %> 
+          </tbody>
+        </table>
+      </div>
+    <% } else { %> 
+      <h4 class="mt-5">You currently don't have any Tickets</h4>
+    <% } %> 
+  </div>  
+</div>
+

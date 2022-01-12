@@ -1,0 +1,97 @@
+<% layout('layouts/boilerplate') %> 
+
+<div class="card shadow col-md-10 my-5">
+  <div class="card-body">
+    <div class="row justify-content-between my-3">
+      <h2 class="col-lg-5 d-inline">Projects</h2>
+      <% if (user.userType === 'Admin') { %> 
+        <button class="col col-12 col-md-4 col-xl-2 btn btn-sm btn-primary bold-text d-inline-block m-2" 
+          data-bs-toggle="modal" 
+          data-bs-target="#createProjectModal">
+            Create New Project
+        </button>
+      <% } %> 
+    </div>
+    <% if (projects.length) { %> 
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <% if (user.userType === 'Admin') { %> 
+              <th>Delete Project</th>
+            <% } %> 
+          </tr>
+        </thead>
+        <tbody>
+          <% if (user.userType !== 'Admin') { %> 
+            <% for (let userProject of user.userProjects) { %>
+              <tr>
+                <td>
+                  <a href="project/<%= userProject._id %>"><%= userProject.title %></a>
+                </td>
+                <td>
+                  <a href="project/<%= userProject._id %>"><%= userProject.description %></a>
+                </td>
+              </tr>
+            <% } %> 
+          <% } else { %> 
+            <% for (let project of projects ) { %>
+              <tr>
+                <td>
+                  <a href="project/<%= project._id %>"><%= project.title %></a>
+                </td>
+                <td>
+                  <a href="project/<%= project._id %>"><%= project.description %></a>
+                </td>
+                <td>
+                  <form action="project/<%= project._id %>?_method=DELETE" method="POST" class="field">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% } %>
+          <% } %>  
+        </tbody>
+      </table>
+    </div>
+    <% } else { %>
+      <h4 class="">There are currently no projects</h4>
+    <% } %>
+  </div>
+</div>
+
+<!-- Modal for creating a new project -->
+<div class="modal fade" id="createProjectModal">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Project</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/" method="POST" class="validated-form" novalidate>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input class="form-control" type="text" name="project[title]" id="title" placeholder='Title' required />
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" name="project[description]" id="description" rows="3" placeholder='Description' required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="devs" class="form-label">Assign Developers</label>
+            <select class="form-select" multiple name="project[assignedDevs]" id="devs" required>
+              <% for (let user of users) { %>
+                <option value="<%= user._id %>"><%= user.username %></option>
+              <% } %>
+            </select>
+            <p class="form-text">Use CRTL/CDM + Left Mouse Button To Select Multiple Developers</p>
+          </div>
+          <button class="btn btn-success mb-3">Create Project</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+<%- layout('layouts/boilerplate') %> 
+
+<div class="card col-md-9 my-5 shadow">
+  <div class="card-body">
+    <div class="row justify-content-between my-3">
+      <h2 class="col-lg-5 d-inline">Users</h2>
+      <% if (user.userType === 'Admin') { %> 
+        <button class="col col-12 col-md-3 col-xl-2 btn btn-sm btn-primary bold-text d-inline-block m-2" 
+          data-bs-toggle="modal" 
+          data-bs-target="#addUserModal">
+          Add User
+        </button>
+      <% } %> 
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>E-mail</th>
+            <th>Phone</th>
+            <!-- Only if user is Admin, show this column -->
+            <% if (user.userType === 'Admin') { %> 
+              <th>Edit</th>
+            <% } %> 
+          </tr>
+        </thead>
+        <tbody>
+          <% if (users.length) { %> 
+            <% for (let dev of users) { %>
+            <tr>
+              <td><%= dev.username %></td>
+              <td><%= dev.email %></td>
+              <td><%= dev.phone %></td>
+              <!-- Only if user is Admin, show this column -->
+              <% if (user.userType === 'Admin') { %> 
+                <td>
+                  <a href="/users/user/<%= dev._id %>">
+                    <span class="icon is-small"><i class="fas fa-ellipsis-v"></i></span>
+                  </a>
+                </td>
+              <% } %> 
+            </tr>
+            <% } %>  
+          <% } %> 
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Modals -->
+<!-- Modal form for creating new user -->
+<div class="modal fade" id="addUserModal">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h3 class="modal-title">Add New User</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class='modal-body'>
+        <form action="/users" method="POST" class="validated-form" novalidate>
+          <div class="mb-3">
+            <label class='form-label' for="fullName">Full Name</label>
+            <input type="text" class="form-control" id='fullName' name="user[username]" placeholder='Users Full Name' required />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input class='form-control' type="password" name="user[password]" id="password" placeholder='Password' required/>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input class='form-control' type="email" name="user[email]" id="email" placeholder='E-mail' required/>
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" name="user[phone]" placeholder='Phone Number' required pattern="[0-9]{10}" />
+          </div>
+          <div class="mb-5">
+            <label for="role" class="form-label">Role</label>
+            <select name="user[userType]" class="form-select" id="role" required>
+              <option value="Developer">Developer</option>
+              <option value="Admin">Admin</option>
+            </select>            
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-success">Add New User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
