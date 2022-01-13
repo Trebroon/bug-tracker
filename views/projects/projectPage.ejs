@@ -1,112 +1,114 @@
 <%- layout('layouts/boilerplate') %> 
 
-<div class="row justify-content-between">
-  <section class="card col col-xl-6 my-5 shadow">
-    <div class="card-body">
-      <div class="row justify-content-between my-3">
-        <h2 class="col-lg-5 d-inline">Tickets</h2>
-        <a href="/project/<%= project._id %>/newTicket" class="btn col col-lg-4 col-xl-3 btn btn-sm btn-primary bold-text d-inline-block m-2">New Ticket</a>
-      </div>
-    <!-- table for tickets -->
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Priority</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% for (let ticket of project.projectTickets) { %> 
+<div class="container">
+  <div class="row justify-content-between">
+    <section class="card col col-xl-6 my-5 shadow">
+      <div class="card-body">
+        <div class="row justify-content-between my-3">
+          <h2 class="col-lg-5 d-inline">Tickets</h2>
+          <a href="/project/<%= project._id %>/newTicket" class="btn col col-lg-4 col-xl-3 btn btn-sm btn-primary bold-text d-inline-block m-2">New Ticket</a>
+        </div>
+      <!-- table for tickets -->
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
             <tr>
-              <td><a href="/project/<%= project._id %>/ticket/<%= ticket._id %>"><%= ticket.title %></a></td>
-              <td><a href="/project/<%= project._id %>/ticket/<%= ticket._id %>"><%= ticket.description %></a></td>
-              <td><%= ticket.type %></td>
-              <td><%= ticket.priority %></td>
-              <td><%= ticket.status %></td>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Type</th>
+              <th>Priority</th>
+              <th>Status</th>
             </tr>
-          <% } %> 
-        </tbody>
-      </table>
-    </div>
-  </div>
-  </section>
-  <!-- table for developer managmet in project -->
-  <section class="card col-xl-5 my-5 shadow">
-    <div class="card-body">
-      <div class="row justify-content-between my-3">
-        <h2 class="col-lg-5 d-inline">Team</h2>
-        <% if (user.userType === 'Admin') { %> 
-          <button class="col col-lg-4 btn btn-sm btn-primary bold-text d-inline-block m-2"
-            data-bs-toggle="modal"
-            data-bs-target="#manageDevsModal">
-              Manage
-          </button>
-        <% } %> 
-      </div>
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>E-mail</th>
-            <th>Phone</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (project.assignedDevs.length) { %> 
-            <% for (let dev of project.assignedDevs) { %> 
+          </thead>
+          <tbody>
+            <% for (let ticket of project.projectTickets) { %> 
               <tr>
-                <td><%= dev.username %></td>
-                <td><%= dev.email %></td>
-                <td><%= dev.phone %></td>
+                <td><a href="/project/<%= project._id %>/ticket/<%= ticket._id %>"><%= ticket.title %></a></td>
+                <td><a href="/project/<%= project._id %>/ticket/<%= ticket._id %>"><%= ticket.description %></a></td>
+                <td><%= ticket.type %></td>
+                <td><%= ticket.priority %></td>
+                <td><%= ticket.status %></td>
               </tr>
             <% } %> 
-          <% } %> 
-        </tbody>
-      </table>
-    </div>
-    </div>
-  </section>
-</div>
-<div class="row">
-  <!-- comment section -->
-  <section class="card col-xl-6 my-5 shadow">
-    <div class="card-body">
-      <!-- displaying comments -->
-      <div class="my-3">
-        <h2>Comments</h2>
-      </div>
-      <ul class="comments">
-        <% if (project.comments.length) { %> 
-          <% for (let comment of project.comments) { %> 
-            <li>
-              <div>
-                <p><%= comment.text %></p>
-                  <% if (comment.author) { %> 
-                    <p class="comment-info">Author: <%= comment.author.username %> Posted At: <%= moment(comment.createdAt).format('lll') %></p>
-                  <% } else { %> 
-                    <p class="comment-info">Author: Deleted User Posted At: <%= moment(comment.createdAt).format('lll') %></p>
-                  <% } %> 
-              </div>
-            </li>
-          <% } %> 
-        <% } else { %> 
-          <p>There are no comments for this project.</p>
-        <% } %> 
-      </ul>
-      <!-- form for comment posting -->
-      <div class="my-4">
-        <form action="<%= project._id %>/comment" method="POST" class="validated-form" novalidate>
-          <input type="text" name="comment[text]" id="comment" class="form-control" autocomplete="off" required>
-          <button class="btn btn-primary btn-sm bold-text mt-2">Post Comment</button>
-        </form>
+          </tbody>
+        </table>
       </div>
     </div>
-  </section>
+    </section>
+    <!-- table for developer managmet in project -->
+    <section class="card col-xl-5 my-5 shadow">
+      <div class="card-body">
+        <div class="row justify-content-between my-3">
+          <h2 class="col-lg-5 d-inline">Team</h2>
+          <% if (user.userType === 'Admin') { %> 
+            <button class="col col-lg-4 btn btn-sm btn-primary bold-text d-inline-block m-2"
+              data-bs-toggle="modal"
+              data-bs-target="#manageDevsModal">
+                Manage
+            </button>
+          <% } %> 
+        </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>E-mail</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (project.assignedDevs.length) { %> 
+              <% for (let dev of project.assignedDevs) { %> 
+                <tr>
+                  <td><%= dev.username %></td>
+                  <td><%= dev.email %></td>
+                  <td><%= dev.phone %></td>
+                </tr>
+              <% } %> 
+            <% } %> 
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </section>
+  </div>
+  <div class="row">
+    <!-- comment section -->
+    <section class="card col-xl-6 my-5 shadow">
+      <div class="card-body">
+        <!-- displaying comments -->
+        <div class="my-3">
+          <h2>Comments</h2>
+        </div>
+        <ul class="comments">
+          <% if (project.comments.length) { %> 
+            <% for (let comment of project.comments) { %> 
+              <li>
+                <div>
+                  <p><%= comment.text %></p>
+                    <% if (comment.author) { %> 
+                      <p class="comment-info">Author: <%= comment.author.username %> Posted At: <%= moment(comment.createdAt).format('lll') %></p>
+                    <% } else { %> 
+                      <p class="comment-info">Author: Deleted User Posted At: <%= moment(comment.createdAt).format('lll') %></p>
+                    <% } %> 
+                </div>
+              </li>
+            <% } %> 
+          <% } else { %> 
+            <p>There are no comments for this project.</p>
+          <% } %> 
+        </ul>
+        <!-- form for comment posting -->
+        <div class="my-4">
+          <form action="<%= project._id %>/comment" method="POST" class="validated-form" novalidate>
+            <input type="text" name="comment[text]" id="comment" class="form-control" autocomplete="off" required>
+            <button class="btn btn-primary btn-sm bold-text mt-2">Post Comment</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
 
 
